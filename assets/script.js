@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* scroll reveal */
-  const revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .gold-underline');
+  const revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .gold-underline, .stat-bar-row');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
