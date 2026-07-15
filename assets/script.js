@@ -101,6 +101,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* hero photo showcase carousel (homepage) */
+  const showcase = document.querySelector('#heroShowcase');
+  if(showcase){
+    const slides = showcase.querySelectorAll('.hs-slide');
+    if(slides.length > 1){
+      let idx = 0;
+      setInterval(() => {
+        slides[idx].classList.remove('active');
+        idx = (idx + 1) % slides.length;
+        slides[idx].classList.add('active');
+      }, 5000);
+    }
+  }
+
+  /* hero full-bleed background carousel (homepage) */
+  const heroBg = document.querySelector('#heroBgCarousel');
+  if(heroBg){
+    const bgSlides = heroBg.querySelectorAll('.hpb-slide');
+    if(bgSlides.length > 1){
+      let bgIdx = 0;
+      setInterval(() => {
+        bgSlides[bgIdx].classList.remove('active');
+        bgIdx = (bgIdx + 1) % bgSlides.length;
+        bgSlides[bgIdx].classList.add('active');
+      }, 6000);
+    }
+  }
+
   /* contact form -> mailto fallback (static site, no backend) */
   const form = document.querySelector('#enquiry-form');
   if(form){
