@@ -114,4 +114,56 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = `mailto:gvcbedcollege@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
     });
   }
+
+  /* header notification bell dropdown */
+  const bell = document.querySelector('#notifyBell');
+  const panel = document.querySelector('#notifyPanel');
+  if(bell && panel){
+    bell.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = panel.classList.toggle('open');
+      bell.setAttribute('aria-expanded', open);
+      if(open) bell.querySelector('.notify-dot').style.display = 'none';
+    });
+    document.addEventListener('click', (e) => {
+      if(!panel.contains(e.target) && e.target !== bell){
+        panel.classList.remove('open');
+        bell.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  /* live activity toast notifications - reassures visitors this is a live, official site */
+  const toastMessages = [
+    { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>', title:'Admissions are open for the 2026&ndash;27 academic year', meta:'Admissions Office' },
+    { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>', title:'Rated 4.6 out of 5 from 218 verified Google reviews', meta:'Google Reviews' },
+    { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>', title:'Admissions team available on 04172 - 237799', meta:'Talk To Us' },
+    { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>', title:'TNTEU-affiliated B.Ed. programme, running since 2007', meta:'GVC Educational Trust' },
+  ];
+  const stack = document.querySelector('#toast-stack');
+  if(stack && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let shown = 0;
+    const maxToasts = 3;
+    const showToast = () => {
+      if(shown >= maxToasts) return;
+      const data = toastMessages[shown % toastMessages.length];
+      const card = document.createElement('div');
+      card.className = 'toast-card';
+      card.innerHTML = `<div class="tc-icon">${data.icon}</div><div><div class="tc-title">${data.title}</div><div class="tc-meta">${data.meta}</div></div><div class="tc-close" role="button" aria-label="Dismiss">&times;</div>`;
+      stack.appendChild(card);
+      requestAnimationFrame(() => card.classList.add('show'));
+      const remove = () => {
+        card.classList.remove('show');
+        setTimeout(() => card.remove(), 500);
+      };
+      card.querySelector('.tc-close').addEventListener('click', remove);
+      setTimeout(remove, 7000);
+      shown++;
+    };
+    setTimeout(showToast, 4000);
+    const interval = setInterval(() => {
+      showToast();
+      if(shown >= maxToasts) clearInterval(interval);
+    }, 15000);
+  }
 });
